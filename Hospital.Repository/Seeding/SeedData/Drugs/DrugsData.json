@@ -1,0 +1,30 @@
+[
+  {
+    "DrugName": "Paracetamol",
+    "Description": "Pain reliever and fever reducer",
+    "Dosage": "500 mg",
+    "StorageTemperature": 25,
+    "DrugTypeID": 1
+  },
+  {
+    "DrugName": "Amoxicillin",
+    "Description": "Antibiotic for bacterial infections",
+    "Dosage": "250 mg",
+    "StorageTemperature": 15,
+    "DrugTypeID": 2
+  },
+  {
+    "DrugName": "Acyclovir",
+    "Description": "Used for treating viral infections",
+    "Dosage": "200 mg",
+    "StorageTemperature": 20,
+    "DrugTypeID": 3
+  },
+  {
+    "DrugName": "Ibuprofen",
+    "Description": "Reduces inflammation and pain",
+    "Dosage": "400 mg",
+    "StorageTemperature": 25,
+    "DrugTypeID": 4
+  }
+]

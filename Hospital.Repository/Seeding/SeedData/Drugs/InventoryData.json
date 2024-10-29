@@ -1,0 +1,30 @@
+[
+  {
+    "DrugID": 1,
+    "QuantityInStock": 100,
+    "ReorderLevel": 20,
+    "ExpiryDate": "2025-09-15",
+    "Location": "Room A, Shelf 1"
+  },
+  {
+    "DrugID": 2,
+    "QuantityInStock": 150,
+    "ReorderLevel": 30,
+    "ExpiryDate": "2025-07-10",
+    "Location": "Room B, Shelf 3"
+  },
+  {
+    "DrugID": 3,
+    "QuantityInStock": 50,
+    "ReorderLevel": 15,
+    "ExpiryDate": "2024-12-20",
+    "Location": "Room C, Shelf 2"
+  },
+  {
+    "DrugID": 4,
+    "QuantityInStock": 80,
+    "ReorderLevel": 25,
+    "ExpiryDate": "2025-05-18",
+    "Location": "Room A, Shelf 2"
+  }
+]

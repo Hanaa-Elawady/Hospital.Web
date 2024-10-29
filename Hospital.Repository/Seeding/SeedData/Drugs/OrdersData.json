@@ -1,0 +1,12 @@
+[
+  {
+    "SupplierID": 1,
+    "OrderDate": "2024-10-01",
+    "DeliveryDate": "2024-10-05"
+  },
+  {
+    "SupplierID": 2,
+    "OrderDate": "2024-09-20",
+    "DeliveryDate": "2024-09-23"
+  }
+]
