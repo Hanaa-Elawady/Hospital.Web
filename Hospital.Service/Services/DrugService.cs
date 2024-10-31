@@ -1,5 +1,8 @@
-﻿using Hospital.Data.Entities.HospitalData.DrugStorage;
+﻿using AutoMapper;
+using Hospital.Data.Entities.HospitalData.DrugStorage;
 using Hospital.Repository.Interfaces;
+using Hospital.Repository.Specifications.DrugSpecifications;
+using Hospital.Service.Dto_s.Drugs;
 using Hospital.Service.Interfaces;
 
 namespace Hospital.Service.Services
@@ -7,28 +10,35 @@ namespace Hospital.Service.Services
 	public class DrugService : IDrugsService
 	{
 		private readonly IUnitOfWork _unitOfWork;
+		private readonly IMapper _mapper;
 
-		public DrugService(IUnitOfWork unitOfWork)
+		public DrugService(IUnitOfWork unitOfWork , IMapper mapper)
 		{
 			_unitOfWork = unitOfWork;
+			_mapper = mapper;
 		}
 
-		public async Task<IReadOnlyList<Drug>> GetAllDrugsAsync()
-		=> await _unitOfWork.Repository<Drug>().GetAllAsync();
-
-		public Task<IReadOnlyList<DrugType>> GetAllDrugTypesAsync()
+		public async Task<IReadOnlyList<DrugDto>> GetAllAsync(DrugSpecifications input)
 		{
-			throw new NotImplementedException();
+			var specs = new DrugWithSpecifications(input);
+			var Drugs =await _unitOfWork.Repository<Drug>().GetAllWithSpecificationsAsync(specs);
+			if (Drugs is null)
+				return null;
+
+			var drugsDto = _mapper.Map<IReadOnlyList<DrugDto>>(Drugs);
+			return drugsDto; 
 		}
 
-		public Task<IReadOnlyList<Order>> GetAllOrdersAsync()
+		public async Task<DrugDto> GetByIdAsync(int? Id)
 		{
-			throw new NotImplementedException();
-		}
+			var specs = new DrugWithSpecifications(Id);
 
-		public Task<Drug> GetDrugByIdAsync(int? productId)
-		{
-			throw new NotImplementedException();
+			var Drug = await _unitOfWork.Repository<Drug>().GetByIdWithSpecificationsAsync(specs);
+			if (Drug is null)
+				return null;
+
+			var drugDto = _mapper.Map<DrugDto>(Drug);
+			return drugDto;
 		}
 	}
 }

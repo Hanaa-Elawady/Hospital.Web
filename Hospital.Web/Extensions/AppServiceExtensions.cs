@@ -1,6 +1,7 @@
 ﻿using Hospital.Data.Contexts;
 using Hospital.Repository.Interfaces;
 using Hospital.Repository.Repositories;
+using Hospital.Service.Dto_s.Profiles;
 using Hospital.Service.HandleResponse;
 using Hospital.Service.Interfaces;
 using Hospital.Service.Services;
@@ -20,6 +21,7 @@ namespace Hospital.Web.Extensions
 
 			services.AddScoped<IUnitOfWork, UnitOfWork>();
 			services.AddScoped<IDrugsService, DrugService>();
+			services.AddAutoMapper(typeof(DrugProfile));
 			services.Configure<ApiBehaviorOptions>(options =>
 			{
 				options.InvalidModelStateResponseFactory = actionContext =>

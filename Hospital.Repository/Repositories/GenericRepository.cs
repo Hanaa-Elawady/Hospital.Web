@@ -1,5 +1,6 @@
 ﻿using Hospital.Data.Contexts;
 using Hospital.Repository.Interfaces;
+using Hospital.Repository.Specifications;
 using Microsoft.EntityFrameworkCore;
 
 namespace Hospital.Repository.Repositories
@@ -16,17 +17,23 @@ namespace Hospital.Repository.Repositories
 		public async Task AddAsync(TEntity entity)
 			=> await _context.Set<TEntity>().AddAsync(entity);
 
+		public void Update(TEntity entity)
+		   => _context.Set<TEntity>().Update(entity);
+
 		public void Delete(TEntity entity)
 			=>  _context.Set<TEntity>().Remove(entity);
 
-		public async Task<IReadOnlyList<TEntity>> GetAllAsync()
-			=> await _context.Set<TEntity>().ToListAsync();
+		public async Task<int> CountSpecificationsAsync(ISpecifications<TEntity> specs)
+				=> await SpecificationsEvaluator<TEntity>.GetQuery(_context.Set<TEntity>(), specs).CountAsync();
 
-		public async Task<TEntity> GetByIdAsync(object id)
-			=> await _context.Set<TEntity>().FindAsync(id);
+		public async Task<TEntity> GetByIdWithSpecificationsAsync(ISpecifications<TEntity> specs)
+		=> await SpecificationsEvaluator<TEntity>.GetQuery(_context.Set<TEntity>(), specs).FirstOrDefaultAsync();
 
+		public async Task<IReadOnlyList<TEntity>> GetAllWithSpecificationsAsync(ISpecifications<TEntity> specs)
+		=> await SpecificationsEvaluator<TEntity>.GetQuery(_context.Set<TEntity>(), specs).ToListAsync();
 
-		public void Update(TEntity entity)
-		   => _context.Set<TEntity>().Update(entity);
+		public async Task<IReadOnlyList<TEntity>> GetAllAsNoTrackingWithSpecificationsAsync(ISpecifications<TEntity> specs)
+		=> await SpecificationsEvaluator<TEntity>.GetQuery(_context.Set<TEntity>(), specs).AsNoTracking().ToListAsync();
+		
 	}
 }
