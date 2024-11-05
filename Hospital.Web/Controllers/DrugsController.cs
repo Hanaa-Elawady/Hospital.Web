@@ -5,9 +5,9 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Hospital.Web.Controllers
 {
-	public class DrugsController : BaseController
-	{
-		private readonly IDrugsService _drugsService;
+    public class DrugsController : BaseController
+    {
+        private readonly IDrugsService _drugsService;
 
 		public DrugsController(IDrugsService drugsService)
 		{
@@ -24,6 +24,12 @@ namespace Hospital.Web.Controllers
 		[HttpPost]
 		public async Task<ActionResult<string>> ReservationDrug(string Drugname, int Quantity)
 			=> Ok(await _drugsService.ReservationDrug(Drugname , Quantity));
+		[HttpGet]
+		public async Task<ActionResult<Drug>> GetAllDrugTypesAsync()
+=> Ok(await _drugsService.GetAllDrugTypesAsync());
+		[HttpGet]
+		public async Task<IReadOnlyList<Order>> GetOrdersAsync()
+	=> await _drugsService.GetAllOrdersAsync();
 
 	}
 }

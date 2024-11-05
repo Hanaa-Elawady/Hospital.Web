@@ -31,6 +31,8 @@ namespace Hospital.Service.Services
 			return drugsDto; 
 		}
 
+        public async Task<IReadOnlyList<DrugType>> GetAllDrugTypesAsync()
+        => await _unitOfWork.Repository<DrugType>().GetAllAsync();
 		public async Task<DrugDto> GetByIdAsync(int? Id)
 		{
 			var specs = new DrugWithSpecifications(Id);
@@ -77,6 +79,14 @@ namespace Hospital.Service.Services
 			}
 			return "Problem Found";
 		}
+
+        public async Task<IReadOnlyList<Order>> GetAllOrdersAsync()
+        => await _unitOfWork.Repository<Order>().GetAllAsync();
+
+        public async Task<Drug> GetDrugByIdAsync(int? productId)
+        {
+            if (productId == null)
+                throw new Exception("id can not be null");
 
 		private async void updateInventory(Inventory inventory , int newQuantity)
 		{
