@@ -1,4 +1,5 @@
-﻿using Hospital.Repository.Specifications.DrugSpecifications;
+﻿using Hospital.Data.Entities.HospitalData.DrugStorage;
+using Hospital.Repository.Specifications.DrugSpecifications;
 using Hospital.Service.Dto_s.Drugs;
 using Hospital.Service.Interfaces;
 using Microsoft.AspNetCore.Mvc;
@@ -24,12 +25,6 @@ namespace Hospital.Web.Controllers
 		[HttpPost]
 		public async Task<ActionResult<string>> ReservationDrug(string Drugname, int Quantity)
 			=> Ok(await _drugsService.ReservationDrug(Drugname , Quantity));
-		[HttpGet]
-		public async Task<ActionResult<Drug>> GetAllDrugTypesAsync()
-=> Ok(await _drugsService.GetAllDrugTypesAsync());
-		[HttpGet]
-		public async Task<IReadOnlyList<Order>> GetOrdersAsync()
-	=> await _drugsService.GetAllOrdersAsync();
 
 	}
 }

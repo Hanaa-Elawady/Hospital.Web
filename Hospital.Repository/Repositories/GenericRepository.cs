@@ -37,6 +37,5 @@ namespace Hospital.Repository.Repositories
 
 		public async Task<IReadOnlyList<TEntity>> GetAllAsNoTrackingWithSpecificationsAsync(ISpecifications<TEntity> specs)
 		=> await SpecificationsEvaluator<TEntity>.GetQuery(_context.Set<TEntity>(), specs).AsNoTracking().ToListAsync();
-
 	}
 }
