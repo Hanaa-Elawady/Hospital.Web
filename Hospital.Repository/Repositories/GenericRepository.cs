@@ -18,7 +18,7 @@ namespace Hospital.Repository.Repositories
 			=> await _context.Set<TEntity>().AddAsync(entity);
 
 		public void Update(TEntity entity)
-		   => _context.Set<TEntity>().Update(entity);
+		    => _context.Set<TEntity>().Update(entity);
 
 		public void Delete(TEntity entity)
 			=>  _context.Set<TEntity>().Remove(entity);
@@ -29,11 +29,14 @@ namespace Hospital.Repository.Repositories
 		public async Task<TEntity> GetByIdWithSpecificationsAsync(ISpecifications<TEntity> specs)
 		=> await SpecificationsEvaluator<TEntity>.GetQuery(_context.Set<TEntity>(), specs).FirstOrDefaultAsync();
 
+		public async Task<TEntity> GetByNameWithSpecificationsAsync(ISpecifications<TEntity> specs)
+		=> await SpecificationsEvaluator<TEntity>.GetQuery(_context.Set<TEntity>(), specs).FirstOrDefaultAsync();
+
 		public async Task<IReadOnlyList<TEntity>> GetAllWithSpecificationsAsync(ISpecifications<TEntity> specs)
 		=> await SpecificationsEvaluator<TEntity>.GetQuery(_context.Set<TEntity>(), specs).ToListAsync();
 
 		public async Task<IReadOnlyList<TEntity>> GetAllAsNoTrackingWithSpecificationsAsync(ISpecifications<TEntity> specs)
 		=> await SpecificationsEvaluator<TEntity>.GetQuery(_context.Set<TEntity>(), specs).AsNoTracking().ToListAsync();
-		
+
 	}
 }

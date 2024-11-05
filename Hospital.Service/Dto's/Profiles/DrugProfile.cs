@@ -8,7 +8,12 @@ namespace Hospital.Service.Dto_s.Profiles
 	{
 		public DrugProfile()
 		{
-			CreateMap<Drug, DrugDto>().ForMember(dest => dest.DrugTypeName, options => options.MapFrom(src => src.DrugType.DrugTypeName)).ReverseMap();
+			CreateMap<Drug, DrugDto>()
+					.ForMember(dest => dest.DrugTypeName, options => options.MapFrom(src => src.DrugType.DrugTypeName))
+					.ForMember(dest => dest.AvailableQuantityInStock, options => options.MapFrom(src => src.Inventories.Sum(x=>x.AvailableQuantityInStock)))
+					.ReverseMap();
+
+			CreateMap<Inventory, InventoryDto>().ReverseMap();
 		}
 	}
 }

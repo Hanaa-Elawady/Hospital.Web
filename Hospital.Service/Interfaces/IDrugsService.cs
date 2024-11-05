@@ -1,5 +1,4 @@
-﻿using Hospital.Data.Entities.HospitalData.DrugStorage;
-using Hospital.Repository.Specifications.DrugSpecifications;
+﻿using Hospital.Repository.Specifications.DrugSpecifications;
 using Hospital.Service.Dto_s.Drugs;
 
 namespace Hospital.Service.Interfaces
@@ -8,5 +7,6 @@ namespace Hospital.Service.Interfaces
 	{
 		Task<DrugDto> GetByIdAsync(int? Id);
 		Task<IReadOnlyList<DrugDto>> GetAllAsync(DrugSpecifications input);
+		Task<string> ReservationDrug(string name, int quantity);
 	}
 }

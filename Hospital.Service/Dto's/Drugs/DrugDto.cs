@@ -10,6 +10,8 @@
 			public decimal StorageTemperature { get; set; }
 			public int DrugTypeID { get; set; }
 			public string DrugTypeName { get; set; }
+			public int AvailableQuantityInStock { get; set; }
 
-		}
+
 	}
+}

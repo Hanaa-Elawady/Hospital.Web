@@ -14,12 +14,16 @@ namespace Hospital.Web.Controllers
 			_drugsService = drugsService;
 		}
 		[HttpGet]
-		public async Task<ActionResult<IReadOnlyList<DrugDto>>> GetAllDrugsAsync([FromQuery]DrugSpecifications specs)
+		public async Task<ActionResult<IReadOnlyList<DrugDto>>> GetAllDrugsAsync([FromQuery] DrugSpecifications specs)
 		=> Ok(await _drugsService.GetAllAsync(specs));
 
 		[HttpGet]
 		public async Task<ActionResult<IReadOnlyList<DrugDto>>> GetByIdAsync(int Id)
 		=> Ok(await _drugsService.GetByIdAsync(Id));
+
+		[HttpPost]
+		public async Task<ActionResult<string>> ReservationDrug(string Drugname, int Quantity)
+			=> Ok(await _drugsService.ReservationDrug(Drugname , Quantity));
 
 	}
 }

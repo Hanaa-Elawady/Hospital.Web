@@ -12,7 +12,6 @@ namespace Hospital.Data.Entities.PatientsData
         public ICollection<Examination> examinations { get; set; } = new List<Examination>();
         public List<string> symptoms { get; set; } = new List<string>();
 
-
         public ICollection<VitalSigns> vitalSigns { get; set; }
         public ICollection<TreatmentPlan> treatmentPlans { get; set; }
 
