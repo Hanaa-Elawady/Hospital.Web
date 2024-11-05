@@ -9,38 +9,40 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Hospital.Web.Extensions
 {
-	public static class AppServiceExtensions
-	{
-		public static IServiceCollection AddApllicationService(this IServiceCollection services , ConfigurationManager configuration)
-		{
-			services.AddDbContext<HospitalDbContext>(options =>
-			{
-				options.UseSqlServer(configuration.GetConnectionString("DefaultConnection"));
-			});
+    public static class AppServiceExtensions
+    {
+        public static IServiceCollection AddApllicationService(this IServiceCollection services, ConfigurationManager configuration)
+        {
+            services.AddDbContext<HospitalDbContext>(options =>
+            {
+                options.UseSqlServer(configuration.GetConnectionString("DefaultConnection"));
+            });
 
-			services.AddScoped<IUnitOfWork, UnitOfWork>();
-			services.AddScoped<IDrugsService, DrugService>();
-			services.Configure<ApiBehaviorOptions>(options =>
-			{
-				options.InvalidModelStateResponseFactory = actionContext =>
-				{
-					var errors = actionContext.ModelState
-								.Where(model => model.Value?.Errors.Count > 0)
-								.SelectMany(model => model.Value?.Errors)
-								.Select(error => error.ErrorMessage)
-								.ToList();
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
+            services.AddScoped<IDrugsService, DrugService>();
+            services.AddScoped<IInventoryService, InventoryService>();
+            services.AddScoped<IOrderService, OrderService>();
+            services.Configure<ApiBehaviorOptions>(options =>
+            {
+                options.InvalidModelStateResponseFactory = actionContext =>
+                {
+                    var errors = actionContext.ModelState
+                                .Where(model => model.Value?.Errors.Count > 0)
+                                .SelectMany(model => model.Value?.Errors)
+                                .Select(error => error.ErrorMessage)
+                                .ToList();
 
-					var errorResponse = new ValidationErrorResponse
-					{
-						Errors = errors
-					};
+                    var errorResponse = new ValidationErrorResponse
+                    {
+                        Errors = errors
+                    };
 
-					return new BadRequestObjectResult(errorResponse);
-				};
-			});
+                    return new BadRequestObjectResult(errorResponse);
+                };
+            });
 
-			return services;
+            return services;
 
-		}
-	}
+        }
+    }
 }
