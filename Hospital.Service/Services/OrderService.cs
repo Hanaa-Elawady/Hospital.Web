@@ -1,6 +1,8 @@
 ﻿using Hospital.Data.Entities.HospitalData.DrugStorage;
 using Hospital.Repository.Interfaces;
+using Hospital.Service.DTOs;
 using Hospital.Service.Interfaces;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,39 +14,48 @@ namespace Hospital.Service.Services
     public class OrderService : IOrderService
     {
         private readonly IUnitOfWork unitOfWork;
+        private readonly IInventoryService inventoryService;
+        private readonly ILogger<OrderService> logger;
 
-        public OrderService(IUnitOfWork unitOfWork, IInventoryService inventoryService)
+        public OrderService(IUnitOfWork unitOfWork, IInventoryService inventoryService, ILogger<OrderService> logger)
         {
             this.unitOfWork = unitOfWork;
+            this.inventoryService = inventoryService;
+            this.logger = logger;
         }
 
-        public async Task<Order> CreateOrder(int supplierId, DateTime orderDate, List<OrderDetail> orderDetails)
+        public async Task<Order> CreateOrder(OrderDetailsDTO orderDetails)
         {
-            if (supplierId <= 0 || orderDetails == null || orderDetails.Count == 0)
+            if (orderDetails == null)
+                throw new Exception("All Failds are Required");
+
+            try
             {
-                throw new Exception("Invalid supplier ID or order details.");
+                var neworderDetail = new OrderDetail
+                {
+                    DrugID = orderDetails.DrugID,
+                    PricePerUnit = orderDetails.PricePerUnit,
+                    Quantity = orderDetails.Quantity,
+
+                };
+                var newOrder = new Order
+                {
+                    SupplierID = orderDetails.SupplierID,
+                    DeliveryDate = orderDetails.DeliveryDate,
+                    OrderDate = orderDetails.OrderDate,
+                    OrderDetails = new List<OrderDetail> { neworderDetail }
+                };
+                await unitOfWork.Repository<Order>().AddAsync(newOrder);
+                await inventoryService.AddToInventory(orderDetails.DrugID, orderDetails.Quantity, orderDetails.InventoryId);
+                await unitOfWork.CompleteAsync();
+
+                return newOrder;
             }
-
-            Order newOrder = new Order
+            catch (Exception ex)
             {
-                SupplierID = supplierId,
-                OrderDate = orderDate,
-
-            };
-
-            var inventory = new Inventory();
-
-            foreach (var detail in orderDetails)
-            {
-                inventory.DrugID = detail.DrugID;
-                newOrder.OrderDetails.Add(detail);
+                logger.LogError(ex, ex.Message);
+                throw;
             }
-            await unitOfWork.Repository<Order>().AddAsync(newOrder);
-            await unitOfWork.Repository<Inventory>().AddAsync(inventory);
-            await unitOfWork.CompleteAsync();
-
-
-            return newOrder;
         }
 
         public async void DeleteOrder(Order order)

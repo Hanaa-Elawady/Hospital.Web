@@ -20,7 +20,7 @@ namespace Hospital.Service.Services
 
         public async Task AddToInventory(int drugId, int quantity, int? InventoryId)
         {
-            if (InventoryId is not null)
+            if (InventoryId is not null && InventoryId != 0)
             {
                 var existInventory = await unitOfWork.Repository<Inventory>().GetByIdAsync(InventoryId);
                 if (existInventory is not null)

@@ -1,4 +1,5 @@
 ﻿using Hospital.Data.Entities.HospitalData.DrugStorage;
+using Hospital.Service.DTOs;
 using Hospital.Service.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -16,8 +17,8 @@ namespace Hospital.Web.Controllers
         }
 
         [HttpPost]
-        public async Task<Order> CreateOrder(int supplierId, DateTime orderDate, List<OrderDetail> orderDetails)
-        => await orderService.CreateOrder(supplierId, orderDate, orderDetails);
+        public async Task<Order> CreateOrder([FromBody] OrderDetailsDTO orderDetails)
+        => await orderService.CreateOrder(orderDetails);
         [HttpDelete]
         public async void DeleteOrder(Order order)
             => orderService.DeleteOrder(order);
