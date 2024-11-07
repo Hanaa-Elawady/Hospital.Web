@@ -4,24 +4,25 @@ using Hospital.Repository.Repositories;
 using Hospital.Service.Dto_s.Profiles;
 using Hospital.Service.HandleResponse;
 using Hospital.Service.Interfaces;
+using Hospital.Service.Profiles;
 using Hospital.Service.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Hospital.Web.Extensions
 {
-	public static class AppServiceExtensions
-	{
-		public static IServiceCollection AddApllicationService(this IServiceCollection services , ConfigurationManager configuration)
-		{
-			services.AddDbContext<HospitalDbContext>(options =>
-			{
-				options.UseSqlServer(configuration.GetConnectionString("DefaultConnection"));
-			});
+    public static class AppServiceExtensions
+    {
+        public static IServiceCollection AddApllicationService(this IServiceCollection services, ConfigurationManager configuration)
+        {
+            services.AddDbContext<HospitalDbContext>(options =>
+            {
+                options.UseSqlServer(configuration.GetConnectionString("DefaultConnection"));
+            });
 
 			services.AddScoped<IUnitOfWork, UnitOfWork>();
 			services.AddScoped<IDrugsService, DrugService>();
-			services.AddAutoMapper(typeof(DrugProfile));
 			services.Configure<ApiBehaviorOptions>(options =>
 			{
 				options.InvalidModelStateResponseFactory = actionContext =>
@@ -32,17 +33,17 @@ namespace Hospital.Web.Extensions
 								.Select(error => error.ErrorMessage)
 								.ToList();
 
-					var errorResponse = new ValidationErrorResponse
-					{
-						Errors = errors
-					};
+                    var errorResponse = new ValidationErrorResponse
+                    {
+                        Errors = errors
+                    };
 
-					return new BadRequestObjectResult(errorResponse);
-				};
-			});
+                    return new BadRequestObjectResult(errorResponse);
+                };
+            });
 
-			return services;
+            return services;
 
-		}
-	}
+        }
+    }
 }
