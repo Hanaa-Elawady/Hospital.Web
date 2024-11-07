@@ -21,17 +21,24 @@ namespace Hospital.Web.Extensions
                 options.UseSqlServer(configuration.GetConnectionString("DefaultConnection"));
             });
 
-			services.AddScoped<IUnitOfWork, UnitOfWork>();
-			services.AddScoped<IDrugsService, DrugService>();
-			services.Configure<ApiBehaviorOptions>(options =>
-			{
-				options.InvalidModelStateResponseFactory = actionContext =>
-				{
-					var errors = actionContext.ModelState
-								.Where(model => model.Value?.Errors.Count > 0)
-								.SelectMany(model => model.Value?.Errors)
-								.Select(error => error.ErrorMessage)
-								.ToList();
+
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
+            services.AddScoped<IDrugsService, DrugService>();
+            services.AddScoped<IInventoryService, InventoryService>();
+            services.AddScoped<IOrderService, OrderService>();
+            services.AddAutoMapper(typeof(OrderProfile));
+            services.AddAutoMapper(typeof(DrugProfile));
+
+            services.Configure<ApiBehaviorOptions>(options =>
+            {
+                options.InvalidModelStateResponseFactory = actionContext =>
+                {
+                    var errors = actionContext.ModelState
+                                .Where(model => model.Value?.Errors.Count > 0)
+                                .SelectMany(model => model.Value?.Errors)
+                                .Select(error => error.ErrorMessage)
+                                .ToList();
+
 
                     var errorResponse = new ValidationErrorResponse
                     {
