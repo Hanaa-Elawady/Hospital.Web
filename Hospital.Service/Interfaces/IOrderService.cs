@@ -10,7 +10,7 @@ namespace Hospital.Service.Interfaces
 {
     public interface IOrderService
     {
-        public Task<Order> CreateOrder(OrderDetailsDTO orderDetails);
+        public Task<OrderDTO> CreateOrder(OrderDTO order);
         public void DeleteOrder(Order order);
         public Task<Order> GetOrderById(int orderid);
 

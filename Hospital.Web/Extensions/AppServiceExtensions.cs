@@ -3,9 +3,11 @@ using Hospital.Repository.Interfaces;
 using Hospital.Repository.Repositories;
 using Hospital.Service.HandleResponse;
 using Hospital.Service.Interfaces;
+using Hospital.Service.Profiles;
 using Hospital.Service.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Hospital.Web.Extensions
 {
@@ -22,6 +24,7 @@ namespace Hospital.Web.Extensions
             services.AddScoped<IDrugsService, DrugService>();
             services.AddScoped<IInventoryService, InventoryService>();
             services.AddScoped<IOrderService, OrderService>();
+            services.AddAutoMapper(typeof(OrderProfile));
             services.Configure<ApiBehaviorOptions>(options =>
             {
                 options.InvalidModelStateResponseFactory = actionContext =>

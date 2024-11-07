@@ -17,8 +17,8 @@ namespace Hospital.Web.Controllers
         }
 
         [HttpPost]
-        public async Task<Order> CreateOrder([FromBody] OrderDetailsDTO orderDetails)
-        => await orderService.CreateOrder(orderDetails);
+        public async Task<OrderDTO> CreateOrder([FromBody] OrderDTO order)
+        => await orderService.CreateOrder(order);
         [HttpDelete]
         public async void DeleteOrder(Order order)
             => orderService.DeleteOrder(order);

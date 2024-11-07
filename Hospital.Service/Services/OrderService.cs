@@ -1,4 +1,5 @@
-﻿using Hospital.Data.Entities.HospitalData.DrugStorage;
+﻿using AutoMapper;
+using Hospital.Data.Entities.HospitalData.DrugStorage;
 using Hospital.Repository.Interfaces;
 using Hospital.Service.DTOs;
 using Hospital.Service.Interfaces;
@@ -16,40 +17,28 @@ namespace Hospital.Service.Services
         private readonly IUnitOfWork unitOfWork;
         private readonly IInventoryService inventoryService;
         private readonly ILogger<OrderService> logger;
+        private readonly IMapper mapper;
 
-        public OrderService(IUnitOfWork unitOfWork, IInventoryService inventoryService, ILogger<OrderService> logger)
+        public OrderService(IUnitOfWork unitOfWork, IInventoryService inventoryService, ILogger<OrderService> logger, IMapper mapper)
         {
             this.unitOfWork = unitOfWork;
             this.inventoryService = inventoryService;
             this.logger = logger;
+            this.mapper = mapper;
         }
 
-        public async Task<Order> CreateOrder(OrderDetailsDTO orderDetails)
+        public async Task<OrderDTO> CreateOrder(OrderDTO order)
         {
-            if (orderDetails == null)
-                throw new Exception("All Failds are Required");
+
 
             try
             {
-                var neworderDetail = new OrderDetail
-                {
-                    DrugID = orderDetails.DrugID,
-                    PricePerUnit = orderDetails.PricePerUnit,
-                    Quantity = orderDetails.Quantity,
 
-                };
-                var newOrder = new Order
-                {
-                    SupplierID = orderDetails.SupplierID,
-                    DeliveryDate = orderDetails.DeliveryDate,
-                    OrderDate = orderDetails.OrderDate,
-                    OrderDetails = new List<OrderDetail> { neworderDetail }
-                };
-                await unitOfWork.Repository<Order>().AddAsync(newOrder);
-                await inventoryService.AddToInventory(orderDetails.DrugID, orderDetails.Quantity, orderDetails.InventoryId);
+                var neworder = mapper.Map<Order>(order);
+                await unitOfWork.Repository<Order>().AddAsync(neworder);
                 await unitOfWork.CompleteAsync();
 
-                return newOrder;
+                return mapper.Map<OrderDTO>(neworder);
             }
             catch (Exception ex)
             {
