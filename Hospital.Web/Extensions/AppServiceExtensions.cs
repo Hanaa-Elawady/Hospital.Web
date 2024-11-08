@@ -1,4 +1,5 @@
 ﻿using Hospital.Data.Contexts;
+using Hospital.Data.Entities.Identity;
 using Hospital.Repository.Interfaces;
 using Hospital.Repository.Repositories;
 using Hospital.Service.Dto_s.Profiles;
@@ -6,6 +7,7 @@ using Hospital.Service.HandleResponse;
 using Hospital.Service.Interfaces;
 using Hospital.Service.Profiles;
 using Hospital.Service.Services;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -20,6 +22,15 @@ namespace Hospital.Web.Extensions
             {
                 options.UseSqlServer(configuration.GetConnectionString("DefaultConnection"));
             });
+            services.AddDbContext<HospitalIdentityDbContext>(options =>
+            {
+                options.UseSqlServer(configuration.GetConnectionString("AuthConnection"));
+            });
+            // Add Identity services to the DI container
+            services.AddIdentity<AppUser, IdentityRole>()
+                .AddEntityFrameworkStores<HospitalIdentityDbContext>()
+                .AddDefaultTokenProviders();
+
 
 
             services.AddScoped<IUnitOfWork, UnitOfWork>();
