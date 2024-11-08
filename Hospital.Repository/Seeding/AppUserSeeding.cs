@@ -22,7 +22,9 @@ namespace Hospital.Repository.Seeding
 
                 };
 
-                await userManager.CreateAsync(user);
+
+                await userManager.CreateAsync(user, "PA$$W0rd");
+
             }
         }
 
