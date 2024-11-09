@@ -1,6 +1,7 @@
 ﻿using Hospital.Data.Entities.Identity;
 using Hospital.Service.UserService.DTOs;
 using Hospital.Web.Controllers;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -27,6 +28,7 @@ namespace Store.Web.Controllers
 
             var rolesList = roles.Select(r => new RoleDTO
             {
+                id = r.Id,
                 Name = r.Name
             }).ToList();
 
@@ -46,6 +48,28 @@ namespace Store.Web.Controllers
             }).ToListAsync();
 
             return Ok(users);
+        }
+        [HttpPost]
+        public async Task<ActionResult> AddRole(string UserId, string RoleName)
+        {
+            var user = await userManager.FindByIdAsync(UserId);
+            var role = await roleManager.FindByNameAsync(RoleName);
+            if (user is null)
+            {
+                throw new Exception($"no user found with Id:{UserId} ");
+                return BadRequest();
+            }
+            if (role is null)
+            {
+                throw new Exception($" the role named {RoleName} dose not exist");
+                return BadRequest();
+            }
+            var InRole = await userManager.IsInRoleAsync(user, RoleName);
+            if (InRole)
+                throw new Exception("this user Already in role");
+
+            await userManager.AddToRoleAsync(user, RoleName);
+            return Ok();
         }
 
 
