@@ -1,6 +1,7 @@
 ﻿using Hospital.Data.Entities.Identity;
 using Hospital.Service.UserService.DTOs;
 using Hospital.Web.Controllers;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -9,7 +10,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Store.Web.Controllers
 {
-
+    //[Authorize(Roles = "Administrator")]
     public class AdminController : BaseController
     {
         private readonly RoleManager<IdentityRole> roleManager;
@@ -50,7 +51,7 @@ namespace Store.Web.Controllers
             return Ok(users);
         }
         [HttpPost]
-        public async Task<ActionResult> AddRole(string UserId, string RoleName)
+        public async Task<ActionResult<string>> AddToRole(string UserId, string RoleName)
         {
             var user = await userManager.FindByIdAsync(UserId);
             var role = await roleManager.FindByNameAsync(RoleName);
@@ -69,7 +70,18 @@ namespace Store.Web.Controllers
                 throw new Exception("this user Already in role");
 
             await userManager.AddToRoleAsync(user, RoleName);
-            return Ok();
+            return Ok("User Added To Role successfully");
+        }
+
+        [HttpDelete]
+        public async Task<ActionResult<bool>> DeleteUser(string userId)
+        {
+            var user = await userManager.FindByIdAsync(userId);
+            if (user is null)
+                throw new Exception($"user with id {userId} not found");
+
+            await userManager.DeleteAsync(user);
+            return Ok(true);
         }
 
 

@@ -7,10 +7,14 @@ using Hospital.Service.HandleResponse;
 using Hospital.Service.Interfaces;
 using Hospital.Service.Profiles;
 using Hospital.Service.Services;
+using Hospital.Service.UserService;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 namespace Hospital.Web.Extensions
 {
@@ -31,12 +35,20 @@ namespace Hospital.Web.Extensions
                 .AddEntityFrameworkStores<HospitalIdentityDbContext>()
                 .AddDefaultTokenProviders();
 
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).
+                AddJwtBearer(options => new TokenValidationParameters
+                {
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["Token:SecurityKey"])),
 
+                });
 
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped<IDrugsService, DrugService>();
             services.AddScoped<IInventoryService, InventoryService>();
             services.AddScoped<IOrderService, OrderService>();
+            services.AddScoped<ITokenService, TokenService>();
+            services.AddScoped<IAccountService, AccountService>();
             services.AddAutoMapper(typeof(OrderProfile));
             services.AddAutoMapper(typeof(DrugProfile));
 

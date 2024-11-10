@@ -31,7 +31,7 @@ namespace Hospital.Repository.Seeding
         public static async Task SeedRolesAsync(RoleManager<IdentityRole> roleManager)
         {
             // Define roles for the hospital system
-            string[] roleNames = { "Doctor", "Nurse", "Receptionist", "Pharmacist", "Lab Technician", "Administrator" };
+            string[] roleNames = { "Doctor", "Nurse", "Receptionist", "Pharmacist", "Lab Technician", "Administrator", "User" };
 
             foreach (var roleName in roleNames)
             {

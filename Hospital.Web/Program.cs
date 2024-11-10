@@ -4,39 +4,39 @@ using Hospital.Web.MiddleWares;
 
 namespace Hospital.Web
 {
-	public class Program
-	{
-		public static async Task Main(string[] args)
-		{
-			var builder = WebApplication.CreateBuilder(args);
+    public class Program
+    {
+        public static async Task Main(string[] args)
+        {
+            var builder = WebApplication.CreateBuilder(args);
 
-			builder.Services.AddControllers();
+            builder.Services.AddControllers();
 
-			AppServiceExtensions.AddApllicationService(builder.Services , builder.Configuration);
+            AppServiceExtensions.AddApllicationService(builder.Services, builder.Configuration);
 
-			builder.Services.AddEndpointsApiExplorer();
+            builder.Services.AddEndpointsApiExplorer();
 
-			builder.Services.AddSwaggerGen();
+            builder.Services.AddSwaggerService();
 
-			var app = builder.Build();
+            var app = builder.Build();
 
-			await ApplySeeding.ApplySeedingAsync(app);
+            await ApplySeeding.ApplySeedingAsync(app);
 
-			if (app.Environment.IsDevelopment())
-			{
-				app.UseSwagger();
-				app.UseSwaggerUI();
-			}
-			app.UseMiddleware<ExceptionMiddleWare>();
+            if (app.Environment.IsDevelopment())
+            {
+                app.UseSwagger();
+                app.UseSwaggerUI();
+            }
+            app.UseMiddleware<ExceptionMiddleWare>();
 
 
-			app.UseHttpsRedirection();
+            app.UseHttpsRedirection();
 
-			app.UseAuthorization();
+            app.UseAuthorization();
 
-			app.MapControllers();
+            app.MapControllers();
 
-			app.Run();
-		}
-	}
+            app.Run();
+        }
+    }
 }
