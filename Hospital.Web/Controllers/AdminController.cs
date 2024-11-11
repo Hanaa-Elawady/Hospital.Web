@@ -10,7 +10,6 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Store.Web.Controllers
 {
-    //[Authorize(Roles = "Administrator")]
     public class AdminController : BaseController
     {
         private readonly RoleManager<IdentityRole> roleManager;

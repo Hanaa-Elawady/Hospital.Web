@@ -22,6 +22,7 @@ namespace Hospital.Web.Extensions
     {
         public static IServiceCollection AddApllicationService(this IServiceCollection services, ConfigurationManager configuration)
         {
+            services.AddIdentityConfig(configuration);
             services.AddDbContext<HospitalDbContext>(options =>
             {
                 options.UseSqlServer(configuration.GetConnectionString("DefaultConnection"));
@@ -30,18 +31,9 @@ namespace Hospital.Web.Extensions
             {
                 options.UseSqlServer(configuration.GetConnectionString("AuthConnection"));
             });
-            // Add Identity services to the DI container
-            services.AddIdentity<AppUser, IdentityRole>()
-                .AddEntityFrameworkStores<HospitalIdentityDbContext>()
-                .AddDefaultTokenProviders();
 
-            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).
-                AddJwtBearer(options => new TokenValidationParameters
-                {
-                    ValidateIssuerSigningKey = true,
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["Token:SecurityKey"])),
 
-                });
+
 
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped<IDrugsService, DrugService>();
@@ -51,7 +43,6 @@ namespace Hospital.Web.Extensions
             services.AddScoped<IAccountService, AccountService>();
             services.AddAutoMapper(typeof(OrderProfile));
             services.AddAutoMapper(typeof(DrugProfile));
-
             services.Configure<ApiBehaviorOptions>(options =>
             {
                 options.InvalidModelStateResponseFactory = actionContext =>

@@ -8,32 +8,34 @@ namespace Hospital.Web.Extensions
         {
             services.AddSwaggerGen(options =>
             {
-                options.SwaggerDoc("v1", new OpenApiInfo { Title = "E-Commerce", Version = "v1" });
+                options.SwaggerDoc("v1", new OpenApiInfo { Title = "Hospital API", Version = "v1" });
 
-                var SecurtySchem = new OpenApiSecurityScheme
+                var securityScheme = new OpenApiSecurityScheme
                 {
-                    Description = "Jwt Token",
-                    Name = "Authoriztion",
+                    Description = "Enter 'Bearer' followed by a space and your JWT token in the text input below.\nExample: 'Bearer abcdef12345'",
+                    Name = "Authorization",
                     In = ParameterLocation.Header,
-                    Type = SecuritySchemeType.ApiKey,
+                    Type = SecuritySchemeType.Http,
                     Scheme = "bearer",
+                    BearerFormat = "JWT",
                     Reference = new OpenApiReference
                     {
-                        Id = "bearer",
+                        Id = "Bearer",
                         Type = ReferenceType.SecurityScheme
                     }
                 };
-                options.AddSecurityDefinition("bearer", SecurtySchem);
 
-                var x = new OpenApiSecurityRequirement
+                options.AddSecurityDefinition("Bearer", securityScheme);
+
+                var securityRequirement = new OpenApiSecurityRequirement
                 {
-                    {SecurtySchem,new[] {"bearer"} }
+                    { securityScheme, Array.Empty<string>() }
                 };
-                options.AddSecurityRequirement(x);
-            }
-            );
+
+                options.AddSecurityRequirement(securityRequirement);
+            });
+
             return services;
         }
-
     }
 }
